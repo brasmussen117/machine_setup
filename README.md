@@ -22,5 +22,21 @@ sudo apt update
 sudo apt install appimagelauncher
 ```
 ### Neovim
+* [Install instructions on their wiki](https://github.com/neovim/neovim/blob/master/INSTALL.md#appimage-universal-linux-package)
+```bash
+cd ~/Downloads
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+chmod u+x nvim.appimage
+./nvim.appimage
+```
+* To expose nvim globally:
+```bash
+mkdir -p /opt/nvim
+mv nvim.appimage /opt/nvim/nvim
+```
+* And the following line to ~/.bashrc:
+```bash
+export PATH="$PATH:/opt/nvim/"
+```
 ### VSCode
 [Download the latest `.deb`](https://code.visualstudio.com/download) and install it.
