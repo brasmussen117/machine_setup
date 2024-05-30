@@ -1,0 +1,125 @@
+# zsh config
+alias zshconfig="$EDITOR ~/.zshrc"
+
+# vim config
+alias vimconf="$EDITOR ~/.vimrc"
+
+# nvim config
+alias nvimconf="$EDITOR ~/.config/nvim/init.lua"
+
+# directory
+alias rm="rm -i"
+alias l="ls -lAh"
+alias la="ls -lah"
+
+# git
+alias gso="git switch"
+alias gci="git commit -v"
+alias gaac="git add --all; git commit -v;"
+alias gcaf="git commit -v -a --fixup"
+alias grb="git rebase"
+alias ga="git add"
+alias gaa="git add --all"
+alias gap="git add -p"
+alias gan="git add -N"
+alias gs="git status"
+alias gb="git branch"
+alias gd="git diff"
+alias gdc="git diff --cached"
+alias gl="git l"
+alias gll="git ll"
+alias gp="git push"
+alias gm="git merge"
+alias gmf="git merge --ff-only"
+alias gpl="git pull"
+alias gbv="git branch -v"
+alias gpr="git remote prune origin"
+alias gr="git remote -v"
+alias grbif="git rebase -i @^^"
+alias grbia="git rebase -i --autosquash"
+alias grd="git push origin --delete"
+
+alias gbtree="git log --graph --simplify-by-decoration --pretty=format:'%d' --all"
+alias gltree="git log --graph --oneline --decorate --all"
+alias glf="git log development.. --oneline --decorate"
+alias gpt="git push origin --tags"
+alias gta="git tag -a"
+alias gcf="git commit -v --fixup"
+alias gsod="git switch development"
+alias gsom="git switch master"
+alias gsob="git switch -"
+alias gstu="git stash push -u"
+alias gplr="git pull --rebase"
+alias gpra="git switch master;git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d"
+alias gbrd="git removed-branches"
+alias gbrD="git removed-branches --prune"
+
+# # composer
+# alias cdump="composer dump-autoload"
+# alias crequire="composer require"
+
+# python unit testing
+alias pyt="pytest"
+alias pytl="pytest -fqx --color=yes"
+alias pytw="ptw . --clear -qx --lf --ff --nf"
+alias pyta="pytest . -q -n auto"
+alias pytan="pytest . -q -n auto -k \"not functional\""
+alias pytaf="pytest . -q -n 2 -k \"functional\""
+alias pytal="pytest . -fqx -n auto --color=yes"
+
+# test coverage
+alias pytc="./scripts/coverage_tests.sh all_tests && \
+    firefox ./.hybels_coverage_html_report/index.html"
+alias pytsc="./scripts/coverage_tests.sh all_tests_lt_100 && \
+    firefox ./.hybels_coverage_html_report/index.html"
+
+alias pytch="firefox ./.hybels_coverage_html_report/index.html"
+
+# pipenv
+alias venv="pipenv shell"
+alias pshell="pipenv shell"
+alias psh="pipenv shell"
+alias prun="pipenv run"
+alias pinstall="pipenv install"
+alias plock="pipenv lock"
+alias psync="pipenv sync"
+alias psynd="pipenv sync --dev"
+alias pmgr="pipenv run python manage.py runserver"
+
+# python
+#if [ $(command -v python3 2>&1) ]; then
+#    alias python="python3"
+#fi
+#if [ $(command -v pip3  2>&1) ]; then
+#    alias pip="pip3"
+#fi
+alias py="python"
+alias manage="python manage.py"
+alias mg="python manage.py"
+alias mgm="python manage.py migrate"
+alias mgmm="python manage.py makemigrations"
+alias mgr="python manage.py runserver"
+alias mgml="python manage.py showmigrations --list | grep -v '\[X\]'"
+
+# misc aliases
+alias fix="~/.screenlayout/layout.sh"
+alias dbas="cd /home/brenden/repos/dbaseweb/"
+alias o2g="cd /home/brenden/repos/hybelso2g/"
+alias o3g="cd /home/brenden/repos/django3g/"
+alias bak="cd /home/brenden/backups/"
+alias tmp="cd /home/brenden/tmp/"
+alias aliases="$EDITOR /home/brenden/.aliases"
+alias sshconfig="$EDITOR /home/brenden/.ssh/config"
+alias functions="$EDITOR /home/brenden/scripts/myscripts/"
+alias sshlog="grep sshd /var/log/auth.log | less"
+alias spsql="sudo -u postgres psql"
+alias pgr="pg_restore -U dbase -d dbase "
+alias odsync="onedrive --confdir ~/.config/onedrive/ --synchronize;\
+ onedrive --confdir ~/.config/onedrive__IT_Requests/ --synchronize"
+alias clr="clear"
+alias dbas-logs="scp dbase:~/dbaseweb/logs/debug.log\* ."
+alias sai="sudo apt install"
+alias sar="sudo apt remove"
+alias upgrade="sudo apt update; sudo apt upgrade -y"
+alias saup="sudo apt update; sudo apt upgrade -y"
+
