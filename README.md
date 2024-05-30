@@ -12,10 +12,19 @@ ln -s <path/to-repo> ~/foo_symlink
 ```
 
 ## Packages/Apps
+### Basics
+```bash
+sudo apt install zsh git curl
+```
 ### zsh
+* [Install instructions from OMZ](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
 ```bash
 sudo apt install zsh
+chsh -s $(which zsh)
 ```
+* Log out and log back in to check if the default shell was changed
+### Oh My Zsh
+
 ### AppImageLauncher
 Makes it easy to treat AppImages like any other application on Ubuntu, automatically adding it to the GUI app launcher.
 * [Install instructions on their wiki](https://github.com/TheAssassin/AppImageLauncher/wiki/Install-on-Ubuntu-or-Debian#use-the-ppas)
