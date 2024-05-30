@@ -1,29 +1,18 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Some personally useful aliases, scripts, and miscellaneous setup for a new machine.
 
-### What is this repository for? ###
+## Setup
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+To make my life easier, I make symlinks from the home dir to this repo—that way they can be sourced in zshrc without having to fix paths.
+To create a symbolic link in the home directory that points to this repo, you can use the following command:
 
-### How do I get set up? ###
+```bash
+ln -s <path/to-repo> ~/foo_symlink
+```
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+## Packages/Apps
+### AppImageLauncher
+### Neovim
+### VSCode
+Download the latest [https://code.visualstudio.com/download](`.deb`) and install it.
