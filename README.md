@@ -24,7 +24,10 @@ chsh -s $(which zsh)
 ```
 * Log out and log back in to check if the default shell was changed
 ### Oh My Zsh
-
+* [Install instructions from their GitHub](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
 ### AppImageLauncher
 Makes it easy to treat AppImages like any other application on Ubuntu, automatically adding it to the GUI app launcher.
 * [Install instructions on their wiki](https://github.com/TheAssassin/AppImageLauncher/wiki/Install-on-Ubuntu-or-Debian#use-the-ppas)
