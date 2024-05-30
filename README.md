@@ -15,4 +15,4 @@ ln -s <path/to-repo> ~/foo_symlink
 ### AppImageLauncher
 ### Neovim
 ### VSCode
-Download the latest (https://code.visualstudio.com/download)[`.deb`] and install it.
+[https://code.visualstudio.com/download Download the latest `.deb`] and install it.
