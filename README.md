@@ -12,6 +12,10 @@ ln -s <path/to-repo> ~/foo_symlink
 ```
 
 ## Packages/Apps
+### zsh
+```bash
+sudo apt install zsh
+```
 ### AppImageLauncher
 Makes it easy to treat AppImages like any other application on Ubuntu, automatically adding it to the GUI app launcher.
 * [Install instructions on their wiki](https://github.com/TheAssassin/AppImageLauncher/wiki/Install-on-Ubuntu-or-Debian#use-the-ppas)
