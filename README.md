@@ -8,6 +8,9 @@ To make my life easier, I make symlinks from the home dir to this repo—that wa
 To create a symbolic link in the home directory that points to this repo, you can use the following command:
 * Commands intended to be run from this repos root dir
 ```bash
+sudo apt update
+sudo apt upgrade -y
+sudo apt autoremove -y
 ln -s ./aliases ~/.aliases
 ln -s ./shell_functions.sh ~/.shell_functions.sh
 ln -s ./zshconfig ~/.zshrc
@@ -59,6 +62,10 @@ sudo apt update
 sudo apt install appimagelauncher
 ```
 ### Neovim
+* Remove prior install if it exists
+```bash
+sudo apt remove neovim
+```
 * [Install instructions on their wiki](https://github.com/neovim/neovim/blob/master/INSTALL.md#appimage-universal-linux-package)
 ```bash
 cd ~/Downloads
