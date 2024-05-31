@@ -6,9 +6,13 @@ Some personally useful aliases, scripts, and miscellaneous setup for a new machi
 
 To make my life easier, I make symlinks from the home dir to this repo—that way they can be sourced in zshrc without having to fix paths.
 To create a symbolic link in the home directory that points to this repo, you can use the following command:
-
+* Commands intended to be run from this repos root dir
 ```bash
-ln -s <path/to-repo> ~/foo_symlink
+ln -s ./aliases ~/.aliases
+ln -s ./shell_functions.sh ~/.shell_functions.sh
+ln -s ./zshconfig ~/.zshrc
+mkdir ~/.config/nvim
+ln -s ./init.lua ~/.config/nvim/init.lua
 ```
 
 ## Packages/Apps
