@@ -124,8 +124,8 @@ fi
 # Functions
 #############################################
 
-if [ -f ~/scripts/myscripts/shell_functions.sh ]; then
-    . ~/scripts/myscripts/shell_functions.sh
+if [ -f ~/.shell_functions.sh ]; then
+    . ~/.shell_functions.sh
 fi
 
 #############################################
@@ -148,9 +148,9 @@ export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/sbin:/home/brenden/.local
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Get vimrc in the environment
-export MYVIMRC=~/.vimrc
+# export MYVIMRC=~/.vimrc
 
-export PATH="$PATH:/opt/nvim-linux64/bin"
+export PATH="$PATH:/opt/nvim"
 
 export PATH="$PATH:/home/brenden/composer"
 
