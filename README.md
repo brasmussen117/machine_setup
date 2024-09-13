@@ -11,11 +11,11 @@ To create a symbolic link in the home directory that points to this repo, you ca
 sudo apt update
 sudo apt upgrade -y
 sudo apt autoremove -y
-ln -s ./aliases ~/.aliases
-ln -s ./shell_functions.sh ~/.shell_functions.sh
-ln -s ./zshconfig ~/.zshrc
+ln -s $(pwd)/aliases ~/.aliases
+ln -s $(pwd)/shell_functions.sh ~/.shell_functions.sh
+ln -s $(pwd)/zshconfig ~/.zshrc
 mkdir ~/.config/nvim
-ln -s ./init.lua ~/.config/nvim/init.lua
+ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 ```
 
 ## Packages/Apps
