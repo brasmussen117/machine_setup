@@ -21,7 +21,7 @@ ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 ## Packages/Apps
 ### Basics
 ```bash
-sudo apt install zsh git curl
+sudo apt install zsh git curl tmux
 ```
 ### zsh
 * [Install instructions from OMZ](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
