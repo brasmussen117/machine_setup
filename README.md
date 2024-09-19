@@ -1,16 +1,28 @@
 # README #
 
-Some personally useful aliases, scripts, and miscellaneous setup for a new machine.
+Some personally useful aliases, scripts, and miscellaneous setups for a new machine.
 
 ## Setup
-
-To make my life easier, I make symlinks from the home dir to this repo—that way they can be sourced in zshrc without having to fix paths.
-To create a symbolic link in the home directory that points to this repo, you can use the following command:
-* Commands intended to be run from this repos root dir
+### Install Basics
 ```bash
 sudo apt update
 sudo apt upgrade -y
+sudo apt install zsh git curl tmux
 sudo apt autoremove -y
+```
+### Generate SSH Key
+```bash
+cd ~/.ssh/; ssh-keygen -t ed25519 -f "github" -N "" -C "brasmussen117"
+```
+### Clone Repo
+```bash
+git clone git@github.com:brasmussen117/machine_setup.git
+```
+### Setup Links
+To make my life easier, I make symlinks from the home dir to this repo. That way, they can be sourced in zshrc without having to fix paths.
+To create a symbolic link in the home directory that points to this repo, you can use the following command:
+**Commands intended to be run from this repos root dir**
+```bash
 ln -s $(pwd)/aliases ~/.aliases
 ln -s $(pwd)/shell_functions.sh ~/.shell_functions.sh
 ln -s $(pwd)/zshconfig ~/.zshrc
@@ -21,10 +33,6 @@ ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 ## Packages/Apps
 ### Chrome
 https://www.google.com/chrome/
-### Basics
-```bash
-sudo apt install zsh git curl tmux
-```
 ### zsh
 * [Install instructions from OMZ](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
 ```bash
