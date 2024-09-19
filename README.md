@@ -7,7 +7,7 @@ Some personally useful aliases, scripts, and miscellaneous setups for a new mach
 ```bash
 sudo apt update
 sudo apt upgrade -y
-sudo apt install zsh git curl tmux
+sudo apt install zsh git curl tmux software-properties-common
 sudo apt autoremove -y
 ```
 ### Generate SSH Key
@@ -15,12 +15,13 @@ sudo apt autoremove -y
 cd ~/.ssh/; ssh-keygen -t ed25519 -f "github" -N "" -C "brasmussen117"
 cat github.pub
 ```
+* Go to [Key Settings](https://github.com/settings/keys) to add the new key.
 ### Clone Repo
 ```bash
 git clone git@github.com:brasmussen117/machine_setup.git
 ```
 ### Setup Links
-To make my life easier, I make symlinks from the home dir to this repo. That way, they can be sourced in zshrc without having to fix paths.
+To make my life easier, I make symlinks from the home dir to this repo. That way, they can be sourced in zshrc without fixing paths.
 To create a symbolic link in the home directory that points to this repo, you can use the following command:
 **Commands intended to be run from this repos root dir**
 ```bash
@@ -37,7 +38,6 @@ https://www.google.com/chrome/
 ### zsh
 * [Install instructions from OMZ](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
 ```bash
-sudo apt install zsh
 chsh -s $(which zsh)
 ```
 * Log out and log back in to check if the default shell was changed
@@ -67,7 +67,6 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 Makes it easy to treat AppImages like any other application on Ubuntu, automatically adding it to the GUI app launcher.
 * [Install instructions on their wiki](https://github.com/TheAssassin/AppImageLauncher/wiki/Install-on-Ubuntu-or-Debian#use-the-ppas)
 ```bash
-sudo apt install software-properties-common
 sudo add-apt-repository ppa:appimagelauncher-team/stable
 sudo apt update
 sudo apt install appimagelauncher
