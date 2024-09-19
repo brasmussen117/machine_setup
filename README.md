@@ -13,6 +13,7 @@ sudo apt autoremove -y
 ### Generate SSH Key
 ```bash
 cd ~/.ssh/; ssh-keygen -t ed25519 -f "github" -N "" -C "brasmussen117"
+cat github.pub
 ```
 ### Clone Repo
 ```bash
