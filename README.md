@@ -28,6 +28,7 @@ To create a symbolic link in the home directory that points to this repo, you ca
 ln -s $(pwd)/aliases ~/.aliases
 ln -s $(pwd)/shell_functions.sh ~/.shell_functions.sh
 ln -s $(pwd)/zshconfig ~/.zshrc
+ln -s $(pwd)/p10k_config ~/.p10k.zsh
 mkdir ~/.config/nvim
 ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 ```
