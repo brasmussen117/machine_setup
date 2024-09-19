@@ -19,6 +19,8 @@ ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
 ```
 
 ## Packages/Apps
+### Chrome
+https://www.google.com/chrome/
 ### Basics
 ```bash
 sudo apt install zsh git curl tmux
