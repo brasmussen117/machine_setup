@@ -46,6 +46,7 @@ chsh -s $(which zsh)
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
+* [Cousine Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Cousine.zip)
 * [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#oh-my-zsh)
 ```bash
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
