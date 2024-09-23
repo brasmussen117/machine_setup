@@ -48,15 +48,15 @@ chsh -s $(which zsh)
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 * [Cousine Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Cousine.zip)
-** [Install Instructions](https://gist.github.com/matthewjberger/7dd7e079f282f8138a9dc3b045ebefa0)
-** Download the zip file and run the following commands
+  * [Install Instructions](https://gist.github.com/matthewjberger/7dd7e079f282f8138a9dc3b045ebefa0)
+  * Download the zip file and run the following commands
   ```bash
   mkdir ~/.fonts
   cd ~/.fonts
   unzip ~/Downloads/Cousine.zip
   fc-cache -fv
   ```
-** Set the font on the terminal profile
+  * Set the font on the terminal profile
 * [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#oh-my-zsh)
 ```bash
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
