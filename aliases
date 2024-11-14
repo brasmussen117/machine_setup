@@ -13,46 +13,17 @@ alias l="ls -lAh"
 alias la="ls -lah"
 
 # git
-alias gso="git switch"
-alias gci="git commit -v"
-alias gaac="git add --all; git commit -v;"
-alias gcaf="git commit -v -a --fixup"
-alias grb="git rebase"
-alias ga="git add"
-alias gaa="git add --all"
-alias gap="git add -p"
-alias gan="git add -N"
-alias gs="git status"
-alias gb="git branch"
-alias gd="git diff"
-alias gdc="git diff --cached"
-alias gl="git l"
-alias gll="git ll"
-alias gp="git push"
-alias gm="git merge"
-alias gmf="git merge --ff-only"
-alias gpl="git pull"
-alias gbv="git branch -v"
-alias gpr="git remote prune origin"
-alias gr="git remote -v"
-alias grbif="git rebase -i @^^"
-alias grbia="git rebase -i --autosquash"
-alias grd="git push origin --delete"
-
-alias gbtree="git log --graph --simplify-by-decoration --pretty=format:'%d' --all"
-alias gltree="git log --graph --oneline --decorate --all"
-alias glf="git log development.. --oneline --decorate"
-alias gpt="git push origin --tags"
-alias gta="git tag -a"
-alias gcf="git commit -v --fixup"
-alias gsod="git switch development"
-alias gsom="git switch master"
-alias gsob="git switch -"
-alias gstu="git stash push -u"
-alias gplr="git pull --rebase"
-alias gpra="git switch master;git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d"
-alias gbrd="git removed-branches"
-alias gbrD="git removed-branches --prune"
+alias gan="git add --intent-to-add" # tell git to track an untracked file without committing it
+alias grbif="git rebase -i @^^" # shortcut for doing fixup rebase after manually committing a fix
+alias gcaf="git commit -v -a --fixup" # automatically make a fixup commit from current dirty files
+alias grbia="git rebase -i --autosquash" # automatically fixup the commit made above
+alias gbrd="git removed-branches" # plugin: report on dangling branches (branches whose remote was deleted)
+alias gbrD="git removed-branches --prune" # plugin: actually remove (fully-merged) dangling branches
+alias gsync="git fetch --all --prune; git removed-branches" # fetch from remote and report on dangling branches
+alias gbtree="git log --graph --simplify-by-decoration --pretty=format:'%d' --all" # show a graph of all branches (and tags)
+alias gbt="git log --graph --simplify-by-decoration --pretty=format:'%d' --all" # show a graph of all branches (and tags)
+alias gtdl="git tag -l | xargs git tag -d; git pull" # DANGEROUS: delete all local tags and pull; useful if someone else changes tags
+alias glf="git log development.. --oneline --decorate" # show commits on current branch on top of development
 
 # # composer
 # alias cdump="composer dump-autoload"
@@ -60,12 +31,10 @@ alias gbrD="git removed-branches --prune"
 
 # python unit testing
 alias pyt="pytest"
-alias pytl="pytest -fqx --color=yes"
-alias pytw="ptw . --clear -qx --lf --ff --nf"
-alias pyta="pytest . -q -n auto"
-alias pytan="pytest . -q -n auto -k \"not functional\""
-alias pytaf="pytest . -q -n 2 -k \"functional\""
-alias pytal="pytest . -fqx -n auto --color=yes"
+alias pytw="ptw ."
+alias pyta="pytest . -n auto -k \"not functional\""
+alias pytan="pytest . -n auto -k \"not functional\""
+alias pytaf="pytest . -k \"functional\""
 
 # test coverage
 alias pytc="./scripts/coverage_tests.sh all_tests && \
@@ -86,20 +55,12 @@ alias psync="pipenv sync"
 alias psynd="pipenv sync --dev"
 alias pmgr="pipenv run python manage.py runserver"
 
-# python
-#if [ $(command -v python3 2>&1) ]; then
-#    alias python="python3"
-#fi
-#if [ $(command -v pip3  2>&1) ]; then
-#    alias pip="pip3"
-#fi
-alias py="python"
-alias manage="python manage.py"
+# Django management
 alias mg="python manage.py"
 alias mgm="python manage.py migrate"
 alias mgmm="python manage.py makemigrations"
 alias mgr="python manage.py runserver"
-alias mgml="python manage.py showmigrations --list | grep -v '\[X\]'"
+alias mgml="python manage.py showmigrations --list | grep -v '\[X\]'" # display migrations that have not been applied
 
 # misc aliases
 alias fix="~/.screenlayout/layout.sh"
@@ -107,19 +68,22 @@ alias dbas="cd /home/brenden/repos/dbaseweb/"
 alias o2g="cd /home/brenden/repos/hybelso2g/"
 alias o3g="cd /home/brenden/repos/django3g/"
 alias bak="cd /home/brenden/backups/"
+alias bakd="cd /home/brenden/backups/dbaseweb/"
 alias tmp="cd /home/brenden/tmp/"
 alias aliases="$EDITOR /home/brenden/.aliases"
 alias sshconfig="$EDITOR /home/brenden/.ssh/config"
 alias functions="$EDITOR /home/brenden/scripts/myscripts/"
 alias sshlog="grep sshd /var/log/auth.log | less"
 alias spsql="sudo -u postgres psql"
-alias pgr="pg_restore -U dbase -d dbase "
+alias pgrd="pg_restore -U dbase -d dbase "
 alias odsync="onedrive --confdir ~/.config/onedrive/ --synchronize;\
  onedrive --confdir ~/.config/onedrive__IT_Requests/ --synchronize"
 alias clr="clear"
-alias dbas-logs="scp dbase:~/dbaseweb/logs/debug.log\* ."
+alias dbas-logs="cd /home/brenden/tmp/logs/dbase/; scp dbase:~/dbaseweb/logs/debug.log\* ."
 alias sai="sudo apt install"
 alias sar="sudo apt remove"
-alias upgrade="sudo apt update; sudo apt upgrade -y"
+alias upgrade="sudo apt update; sudo apt upgrade -y; sudo apt autoremove"
 alias saup="sudo apt update; sudo apt upgrade -y"
+alias ez="exec zsh"
+alias x="exit"
 
