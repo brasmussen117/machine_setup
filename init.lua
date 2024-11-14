@@ -72,3 +72,22 @@ vim.api.nvim_set_keymap('n', '<Leader><Leader>L', '<Plug>(easymotion-overwin-lin
 vim.api.nvim_set_keymap('n', '<Leader><Leader>w', '<Plug>(easymotion-bd-w)', {})
 vim.api.nvim_set_keymap('n', '<Leader><Leader>w', '<Plug>(easymotion-overwin-w)', { noremap = true })
 
+-- boole.nvim setup (https://github.com/nat-418/boole.nvim)
+require('boole').setup({
+  mappings = {
+    increment = '<C-a>',
+    decrement = '<C-x>'
+  },
+  -- User defined loops
+  additions = {
+    {'Foo', 'Bar'},
+    {'tic', 'tac', 'toe'}
+  },
+  allow_caps_additions = {
+    {'enable', 'disable'}
+    -- enable → disable
+    -- Enable → Disable
+    -- ENABLE → DISABLE
+  }
+})
+
