@@ -165,3 +165,8 @@ export JIRA_URL="https://bert-hybels.atlassian.net"
 export JIRA_PREFIX="DBAS"
 export JIRA_NAME="brenden"
 export JIRA_DEFAULT_ACTION="mine"
+
+# MySQL setup
+export MYSQLCLIENT_LDFLAGS=$(pkg-config --libs mysqlclient)
+export MYSQLCLIENT_CFLAGS=$(pkg-config --cflags mysqlclient)
+
