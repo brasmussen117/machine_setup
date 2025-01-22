@@ -77,18 +77,19 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+	colored-man-pages
+	dirhistory
+	docker
 	git 
-	virtualenv 
-	python
-	tmux
 	jira
+	per-directory-history
+	python
+	sudo
+	tmux
+	virtualenv 
+	you-should-use
 	zsh-autosuggestions
 	zsh-syntax-highlighting
-	you-should-use
-	sudo
-	dirhistory
-	colored-man-pages
-	docker
 )
 
 source $ZSH/oh-my-zsh.sh
