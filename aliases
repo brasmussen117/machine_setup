@@ -31,8 +31,8 @@ alias glf="git log development.. --oneline --decorate" # show commits on current
 
 # python unit testing
 alias pyt="pytest"
-alias pytw="ptw ."
-alias pyta="pytest . -n auto -k \"not functional\""
+alias pytw="ptw . -x --ff"
+# alias pyta="pytest . -n auto -k \"not functional\""
 alias pytan="pytest . -n auto -k \"not functional\""
 alias pytaf="pytest . -k \"functional\""
 
