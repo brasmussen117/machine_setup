@@ -24,6 +24,26 @@ require("lazy").setup({
         -- 		vim.cmd("highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline")
         -- 	end
         -- },
+	{
+	    "kdheepak/lazygit.nvim",
+	    lazy = true,
+	    cmd = {
+		"LazyGit",
+		"LazyGitConfig",
+		"LazyGitCurrentFile",
+		"LazyGitFilter",
+		"LazyGitFilterCurrentFile",
+	    },
+	    -- optional for floating window border decoration
+	    dependencies = {
+		"nvim-lua/plenary.nvim",
+	    },
+	    -- setting the keybinding for LazyGit with 'keys' is recommended in
+	    -- order to load the plugin when the command is run for the first time
+	    -- keys = {
+		-- { "<Leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" }
+	    -- }
+	},
 	"xiyaowong/fast-cursor-move.nvim",
 	"easymotion/vim-easymotion",
 	"tpope/vim-surround",
@@ -56,6 +76,9 @@ require("lazy").setup({
 -- Global
 vim.g.mapleader = " "
 
+-- LazyGit
+vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>LazyGit<cr>', {})
+
 -- Easy-Motion
 -- <Leader>f{char} to move to {char}
 vim.api.nvim_set_keymap('n', '<Leader><Leader>f', '<Plug>(easymotion-bd-f)', {})
@@ -79,11 +102,11 @@ require('boole').setup({
     decrement = '<C-x>'
   },
   -- User defined loops
-  additions = {
-    {'Foo', 'Bar'},
-    {'tic', 'tac', 'toe'}
-  },
+  -- additions = {
+  -- },
   allow_caps_additions = {
+    {'foo', 'bar', 'baz'},
+    {'huh', 'wuh', 'ugh'},
     {'enable', 'disable'}
     -- enable → disable
     -- Enable → Disable
