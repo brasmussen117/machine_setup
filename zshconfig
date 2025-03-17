@@ -92,7 +92,7 @@ export EDITOR=nvim
 #############################################
 
 if [ -f ~/.aliases ]; then
-    . ~/.aliases
+    source ~/.aliases
 fi
 
 #############################################
@@ -102,7 +102,7 @@ fi
 #############################################
 
 if [ -f ~/.shell_functions.sh ]; then
-    . ~/.shell_functions.sh
+    source ~/.shell_functions.sh
 fi
 
 #############################################
