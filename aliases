@@ -24,6 +24,7 @@ alias gbtree="git log --graph --simplify-by-decoration --pretty=format:'%d' --al
 alias gbt="git log --graph --simplify-by-decoration --pretty=format:'%d' --all" # show a graph of all branches (and tags)
 alias gtdl="git tag -l | xargs git tag -d; git pull" # DANGEROUS: delete all local tags and pull; useful if someone else changes tags
 alias glf="git log development.. --oneline --decorate" # show commits on current branch on top of development
+alias glr="git pull --rebase"
 
 # # composer
 # alias cdump="composer dump-autoload"
