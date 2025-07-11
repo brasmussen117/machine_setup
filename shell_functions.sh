@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Constants for colors
 BLACK='\033[0;30m'
 RED='\033[0;31m'
@@ -35,6 +37,12 @@ checkmd5 () {
 # $1: search string
 agl () {
     alias | grep $1 $2 --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} | less
+}
+
+# shortcut to do a git fixup with fzf (fuzzy finder) as a TUI
+# $1: number of commits to look back
+gfu () {
+    ! git log -n "$1" --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git commit --fixup
 }
 
 # clean pycache files and folders inside current dir
