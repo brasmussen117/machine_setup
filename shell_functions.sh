@@ -45,6 +45,36 @@ gfu () {
     ! git log -n "$1" --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git commit --fixup
 }
 
+# shoutcut to install a deb file downloaded to the Downloads directory
+# $1: name of the deb file to install
+install_deb_from_downloads() {
+    local deb_src="$1"
+
+    if [[ -z "$deb_src" ]]; then
+        echo "${LTBLUE}Usage: install_deb_from_downloads <path-to-deb-file>${NC}"
+        return 1
+    fi
+
+    if [[ ! -f "$deb_src" ]]; then
+        echo "${RED}Error: File '$deb_src' does not exist.${NC}"
+        return 1
+    fi
+
+    local deb_name
+    deb_name="$(basename "$deb_src")"
+
+    local target_dir="/var/cache/apt/archives/partial"
+    local deb_dest="$target_dir/$deb_name"
+
+    echo "${LTGRAY}Moving $deb_src to $deb_dest...${NC}"
+    sudo mv "$deb_src" "$deb_dest"
+
+    echo "${LTGRAY}Installing $deb_name...${NC}"
+    sudo apt install "$deb_dest"
+
+    echo "${LTGREEN}Installation of $deb_name completed.${NC}"
+}
+
 # clean pycache files and folders inside current dir
 # from SO - https://stackoverflow.com/a/41386937/2918074
 #pycrm () {
