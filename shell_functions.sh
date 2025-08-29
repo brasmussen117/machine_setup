@@ -45,7 +45,7 @@ gfu () {
     ! git log -n "$1" --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git commit --fixup
 }
 
-# shoutcut to install a deb file downloaded to the Downloads directory
+# shortcut to install a deb file downloaded to the Downloads directory
 # $1: name of the deb file to install
 install_deb_from_downloads() {
     local deb_src="$1"
