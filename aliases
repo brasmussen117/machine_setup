@@ -11,6 +11,7 @@ alias nvimconf="$EDITOR ~/.config/nvim/init.lua"
 alias rm="rm -i"
 alias l="ls -lAh"
 alias la="ls -lah"
+alias lt="ls -lAht"
 
 # git
 alias gan="git add --intent-to-add" # tell git to track an untracked file without committing it
@@ -90,4 +91,6 @@ alias sar="sudo apt remove"
 alias upgrade="sudo apt update; sudo apt upgrade -y; sudo apt autoremove; sudo snap refresh"
 alias ez="exec zsh"
 alias x="exit"
+alias wake="wakeonlan -i 172.24.1.32 18:C0:4D:93:05:AC"
+alias vpn="nmcli connection up \"Hybels\""
 
