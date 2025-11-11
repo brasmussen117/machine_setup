@@ -9,7 +9,7 @@ Some personally useful aliases, scripts, and miscellaneous setups for a new mach
 ```bash
 sudo apt update
 sudo apt upgrade -y
-sudo apt install zsh git curl tmux software-properties-common
+sudo apt install zsh git curl tmux software-properties-common i3
 sudo apt autoremove -y
 ```
 
@@ -41,6 +41,8 @@ ln -s $(pwd)/zshconfig ~/.zshrc
 ln -s $(pwd)/p10k_config ~/.p10k.zsh
 mkdir ~/.config/nvim
 ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
+mkdir ~/.config/i3
+ln -s $(pwd)/i3_config ~/.config/i3/config
 ```
 
 ## Packages/Apps ##
