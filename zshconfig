@@ -67,6 +67,7 @@ plugins=(
 	colored-man-pages
 	dirhistory
 	docker
+	docker-compose
 	git
 	jira
 	per-directory-history
@@ -144,8 +145,8 @@ export JIRA_NAME="brenden"
 export JIRA_DEFAULT_ACTION="mine"
 
 # MySQL setup
-export MYSQLCLIENT_LDFLAGS=$(pkg-config --libs mysqlclient)
-export MYSQLCLIENT_CFLAGS=$(pkg-config --cflags mysqlclient)
+# export MYSQLCLIENT_LDFLAGS=$(pkg-config --libs mysqlclient)
+# export MYSQLCLIENT_CFLAGS=$(pkg-config --cflags mysqlclient)
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
