@@ -66,6 +66,15 @@ alias mgmm="python manage.py makemigrations"
 alias mgr="python manage.py runserver"
 alias mgml="python manage.py showmigrations --list | grep -v '\[X\]'" # display migrations that have not been applied
 
+# uv
+alias urun="uv run"
+alias uadd="uv add"
+alias ulock="uv lock"
+alias usync="uv sync"
+alias usynd="uv sync --dev"
+alias umg="uv run python manage.py"
+alias umgr="uv run python manage.py runserver"
+
 # misc aliases
 alias fix="~/.screenlayout/layout.sh"
 alias dbas="cd /home/brenden/repos/dbaseweb/"
