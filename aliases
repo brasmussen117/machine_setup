@@ -15,6 +15,7 @@ alias lt="ls -lAht"
 
 # git
 alias gan="git add --intent-to-add" # tell git to track an untracked file without committing it
+alias ganf="git add --intent-to-add -f" # force git to track an untracked file without committing it
 alias grbif="git rebase -i @^^" # shortcut for doing fixup rebase after manually committing a fix
 alias gcaf="git commit -v -a --fixup" # automatically make a fixup commit from current dirty files
 alias grbia="git rebase -i --autosquash" # automatically fixup the commit made above
@@ -34,7 +35,7 @@ alias gswb="git switch -" # switch to last branch
 
 # python unit testing
 alias pyt="pytest"
-alias pytw="ptw . -x --ff"
+alias pytw="ptw --clear --now --log-level=INFO . -x --ff"
 # alias pyta="pytest . -n auto -k \"not functional\""
 alias pytan="pytest . -n auto -k \"not functional\""
 alias pytaf="pytest . -k \"functional\""
