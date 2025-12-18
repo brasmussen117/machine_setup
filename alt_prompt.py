@@ -7,6 +7,7 @@ import os
 import re
 import subprocess
 import socket
+import errno
 
 # Third-party imports
 
@@ -31,7 +32,7 @@ GIT_UNSTAGED = "~"
 GIT_UNTRACKED = "?"
 GIT_STASHED = "*"
 
-MAX_PATH_LENGTH = 50
+MAX_PATH_LENGTH = 70
 
 BLACK = "black"
 RED = "red"
@@ -41,6 +42,8 @@ BLUE = "blue"
 MAGENTA = "magenta"
 CYAN = "cyan"
 WHITE = "white"
+
+current_working_dir = ""  # pylint: disable=C0103
 
 
 # region Styling Utilities
@@ -135,24 +138,24 @@ def style(s, foreground=None, background=None, bold=False, underline=False, reve
 
 
 # region Part Methods
-def terminal_width():
+def _terminal_width():
     """Return the width of the terminal in characters."""
     width = os.popen("stty size", "r").read().split()[1]
     return int(width)
 
 
-def horizontal_rule(char=" "):
+def _horizontal_rule(char=" "):
     """Return a long string of the given characters.
 
     The string will be as long as the width of the user's terminal in
     characters, and will have a newline at the end.
 
     """
-    width = terminal_width()
+    width = _terminal_width()
     return char * width + _zero_width("\n")
 
 
-def shorten_path(path: str, max_length=MAX_PATH_LENGTH):
+def _shorten_path(path: str, max_length=MAX_PATH_LENGTH):
     """Return the given path, shortened if it's too long.
 
     Parent directories will be collapsed. Examples (with SHORT_PATH_LENGTH=3 and MAX_PATH_LENGTH=30):
@@ -189,29 +192,44 @@ def shorten_path(path: str, max_length=MAX_PATH_LENGTH):
     return path
 
 
+def get_path(path: str, max_length=MAX_PATH_LENGTH):
+    """Return the given path, shortened if it's too long, with a folder symbol."""
+    short_path = _shorten_path(path, max_length)
+    return {"text": f"{DIR_SYMBOL} {short_path}", "foreground": BLACK, "background": GREEN}
+
+
 def get_current_working_dir():
     """Return the full absolute path to the current working directory."""
-
-    # Code for getting the current working directory, copied from
-    # <https://github.com/Lokaltog/powerline/>.
+    global current_working_dir  # pylint: disable=global-statement
     try:
-        cwd = os.getcwd()
+        current_working_dir = os.getcwd()
     except OSError as e:
         if e.errno == 2:
-            # User most probably deleted the directory, this happens when
-            # removing files from Mercurial repos for example.
-            cwd = "[not found]"
+            current_working_dir = "[not found]"
         else:
             raise
-    return cwd
+    return {"text": current_working_dir, "foreground": BLACK, "background": GREEN}
 
 
 def get_venv():
     """Return the name of the current virtual environment, or blank string if none."""
     path = os.getenv("VIRTUAL_ENV", "")
+    shell_level = os.getenv("SHLVL", "0")
+    text = ""
     if path:
+        # We're in a virtualenv, and not deeply nested shells.
         path = os.path.basename(path)
-    return f"{path} {VENV_SYMBOL}" if path else ""
+        text += f"{path} {VENV_SYMBOL}"
+    try:
+        shell_level = int(shell_level)
+        if shell_level > 1:
+            if text:
+                text += " "
+            text += f"{'('*shell_level}shell{')'*shell_level}"
+    except (TypeError, ValueError):
+        pass
+
+    return {"text": text, "foreground": BLACK, "background": MAGENTA}
 
 
 def get_git_branch():
@@ -228,22 +246,26 @@ def get_git_branch():
     return f"{GIT_SYMBOL} {branch_name}"
 
 
-def get_user_name():
+def _get_user_name():
     """Return the current user's username, or '????' if `USER` env var is not set."""
     return os.getenv("USER") or "????"
 
 
-def get_host_name():
+def _get_host_name():
     """Return the current host's hostname using socket.gethostname(), or '[unknown host]' if it cannot be determined."""
     return socket.gethostname() or "[unknown host]"
 
 
 def get_user_at_host():
     """Return 'user@host' if in an SSH session, else a placeholder symbol."""
+    styles = {"text": "", "foreground": WHITE, "background": BLUE, "bold": False}
     if os.environ.get("SSH_CONNECTION"):
-        return f"{get_user_name()}@{get_host_name()}"
+        styles["text"] = f"{_get_user_name()}@{_get_host_name()}"
     else:
-        return USER_PLACEHOLDER
+        styles["text"] = USER_PLACEHOLDER
+        styles["bold"] = True
+
+    return styles
 
 
 def get_chevron(last_exit_status=False):
@@ -252,13 +274,18 @@ def get_chevron(last_exit_status=False):
     return style(CHEVRON, foreground=fg, bold=True)
 
 
-def get_last_exit_status(last_exit_status=0):
+def get_last_exit_status(last_exit_code=0):
     """Return the last exit status as a string, or blank string if zero."""
+    output = {"text": "", "foreground": BLACK, "background": RED, "bold": True}
     try:
-        last_exit_status = int(last_exit_status)
+        last_exit_code = int(last_exit_code)
     except (TypeError, ValueError):
-        return ""
-    return f" ERR:{last_exit_status} " if last_exit_status > 0 else ""
+        return output
+    if not last_exit_code:
+        return output
+    # return f"({last_exit_code}){errno.errorcode[last_exit_code]}"
+    output["text"] = f"({last_exit_code}){os.strerror(last_exit_code)}"
+    return output
 
 
 def _parse_zsh_vcs_info(git_info: str):
@@ -327,7 +354,7 @@ def get_git_info(git_info: str):
     }
 
 
-def get_vcs_string(git_porcelain: str, vcs_info=None):
+def get_vcs_info(git_porcelain: str, vcs_info=None):
     """Return a git info part dictionary based on git porcelain output.
     Expected command:
     `git status --porcelain=v2 --show-stash --branch --ahead-behind --untracked-files=normal`
@@ -343,22 +370,20 @@ def get_vcs_string(git_porcelain: str, vcs_info=None):
 
     git_fg = BLACK
     git_bg = YELLOW
+    output = {
+        "text": "",
+        "foreground": git_fg,
+        "background": git_bg,
+    }
 
-    if not git_porcelain.strip():
-        return {
-            "text": "",
-            "foreground": git_fg,
-            "background": git_bg,
-        }
+    git_porcelain = git_porcelain.strip()
+    if not git_porcelain:
+        return output
 
-    lines = git_porcelain.strip().splitlines()
+    lines = git_porcelain.splitlines()
 
-    if not lines or not any(lines):
-        return {
-            "text": "",
-            "foreground": git_fg,
-            "background": git_bg,
-        }
+    if not any(lines):
+        return output
 
     # Get branch name
     branch = "unknown"
@@ -427,13 +452,9 @@ def get_vcs_string(git_porcelain: str, vcs_info=None):
     if stash > 0:
         parts.append(f"{GIT_STASHED}{stash}")
 
-    text = " ".join(parts)
+    output["text"] = " ".join(parts)
 
-    return {
-        "text": text,
-        "foreground": git_fg,
-        "background": git_bg,
-    }
+    return output
 
 
 # endregion Part Methods
@@ -449,7 +470,7 @@ def printable_length(s):
 def parts_assembler(parts, side="left"):
     """Assemble prompt parts with separators."""
     prompt = ""
-    parts = [part for part in parts if part["text"]]  # Remove empty parts.
+    parts = [part for part in parts if part.get("text")]  # Remove empty parts.
     last_bg = None
     for i, part in enumerate(parts):
         part_text = part.pop("text")
@@ -514,48 +535,76 @@ def parts_assembler(parts, side="left"):
 #     return assembled_parts
 
 
-def bash_prompt(current_working_dir, last_exit_status, git_porcelain="", vcs_info=None):
+def bash_prompt(parts):
     """Return a single bash prompt line."""
-    user = get_user_at_host()
-    path = shorten_path(current_working_dir)
-    processed_git_info = get_vcs_string(git_porcelain, vcs_info)
-    left_parts = [
-        {"text": user, "foreground": WHITE, "background": BLUE, "bold": True},
-        {"text": path, "foreground": BLACK, "background": GREEN},
-        processed_git_info,  # returns a dict with appropriate text, fg, bg
-    ]
-    venv = get_venv()
-    right_parts = [
-        {"text": last_exit_status, "foreground": BLACK, "background": RED},
-        {"text": venv, "foreground": BLACK, "background": MAGENTA},
-    ]
+    user, path, vcs, last_exit_status, venv = parts
+
+    path_length = MAX_PATH_LENGTH
+    path_text = path["text"]
+
+    left_parts = [user, path, vcs]
+    right_parts = [last_exit_status, venv]
     left_assembly = parts_assembler(left_parts, side="left")
     right_assembly = parts_assembler(right_parts, side="right")
+
     # Calculate spacing to right-align the right prompt.
     content_length = printable_length(left_assembly) + printable_length(right_assembly)
 
-    needed_space = terminal_width() - content_length - 1
-    # print("content_length: ", content_length)
-    # print("terminal_width: ", terminal_width())
-    # print("needed_space:   ", needed_space)
+    needed_space = _terminal_width() - content_length - 1
+    if needed_space < 0:
+        path_length = printable_length(path_text) + needed_space - 2
+        new_path = get_path(current_working_dir, max_length=path_length)
+        left_parts[1] = new_path
+        left_assembly = parts_assembler(left_parts, side="left")
+        # XXX: remove debug
+        from pprint import pprint
+
+        print()
+        print("#" * 100)
+        print(f' {" left_assembly ":-^60} ')
+        print()
+        pprint(left_assembly)
+        print()
+        print("#" * 100)
+        print()
+        content_length = printable_length(left_assembly) + printable_length(right_assembly)
+        needed_space = _terminal_width() - content_length - 1
+
     spacing = str(SPACER * needed_space) if needed_space else ""
     # print(f'"{spacing}"')
     return f"{left_assembly}{spacing}{right_assembly}{_newline()}{get_chevron(last_exit_status)} "
 
 
+def _get_parts(args):
+    """Validate command-line arguments."""
+    global current_working_dir  # pylint: disable=global-statement
+    user = get_user_at_host()
+    venv = get_venv()
+
+    last_exit_status = get_last_exit_status(args.last_exit_code)
+    cwd = args.current_working_dir
+    current_working_dir = cwd
+    path = get_path(cwd) if cwd else get_current_working_dir()
+
+    parsed_vcs_info = _parse_zsh_vcs_info(args.vcs_info or "")
+    git_porcelain = args.git_porcelain or ""
+    vcs = get_vcs_info(git_porcelain, parsed_vcs_info)
+
+    return [user, path, vcs, last_exit_status, venv]
+
+
 def main():
     """Print the prompt."""
-    side_choices = ("left", "right", "bash")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "side",
         metavar="left|right|bash",
-        choices=side_choices,
+        choices=("left", "right", "bash"),
         help="which zsh prompt to print (the left- or right-side prompt)",
     )
     parser.add_argument(
-        "--last-exit-status",
-        dest="last_exit_status",
+        "--last-exit-code",
+        dest="last_exit_code",
         # type=int,
         help="the exit status (int) of the previous shell command "
         "(default: None, printing last exit status will not be "
@@ -581,22 +630,17 @@ def main():
     )
     args = parser.parse_args()
 
-    side = args.side
-    print(args.last_exit_status)
-    last_exit_status = get_last_exit_status(args.last_exit_status)
-    print("last_exit_status:", last_exit_status)
-    cwd = args.current_working_dir or get_current_working_dir()
-    vcs_info = _parse_zsh_vcs_info(args.vcs_info or "")
-    git_porcelain = args.git_porcelain or ""
-    match side:
+    parts = _get_parts(args)
+
+    match args.side:
         # case "left":
         #     output = left_prompt(cwd, last_exit_status)
         # case "right":
         #     output = right_prompt(last_exit_status)
         case "bash":
-            output = bash_prompt(cwd, last_exit_status, git_porcelain, vcs_info)
+            output = bash_prompt(parts)
         case _:
-            parser.error(f"Invalid side: {side}")
+            parser.error(f"Invalid side: {args.side}")
 
     print(output)
 
