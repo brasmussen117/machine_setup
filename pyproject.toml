@@ -1,0 +1,19 @@
+[project]
+name = "machine_setup"
+version = "0.1.0"
+description = "My helpers and utilities for new Ubuntu machine setup."
+authors = [
+    { name = "Brenden Rasmussen", email = "brenden.rasmussen.117@gmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+
+[project.urls]
+Homepage = "https://github.com/brasmussen117/machine_setup"
+
+[tool.black]
+line-length = 120
+
+[tool.pylint]
+max-line-length = 120
