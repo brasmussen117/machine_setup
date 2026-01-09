@@ -3,12 +3,12 @@
 
 # System imports
 import argparse
-from datetime import datetime
 import os
 import re
 import subprocess
 import socket
 from copy import deepcopy
+from datetime import datetime
 
 # Third-party imports
 
@@ -22,7 +22,7 @@ SPACER = "·"
 CHEVRON = ""
 USER_PLACEHOLDER = " "
 ELLIPSIS = "…"
-GIT_SYMBOL = ""
+BRANCH_SYMBOL = ""
 DIR_SYMBOL = ""
 VENV_SYMBOL = ""
 GIT_AHEAD = "↑"
@@ -43,15 +43,15 @@ MAGENTA = "magenta"
 CYAN = "cyan"
 WHITE = "white"
 
-# Section colors
-USER_FG = BLACK
-USER_BG = WHITE
+# Section colors (allow override via environment variables)
+USER_FG = os.getenv("PROMPT_USER_FG", BLACK)
+USER_BG = os.getenv("PROMPT_USER_BG", WHITE)
 
-PATH_FG = WHITE
-PATH_BG = BLUE
+PATH_FG = os.getenv("PROMPT_PATH_FG", WHITE)
+PATH_BG = os.getenv("PROMPT_PATH_BG", BLUE)
 
-VENV_FG = BLACK
-VENV_BG = MAGENTA
+VENV_FG = os.getenv("PROMPT_VENV_FG", BLACK)
+VENV_BG = os.getenv("PROMPT_VENV_BG", MAGENTA)
 
 
 # region Styling Utilities
@@ -97,6 +97,11 @@ def _background(s, color):
 def _bold(s):
     bold = _zero_width("\x1b[1m")
     return f"{bold}{s}"
+
+
+def _quick_bold(s):
+    end_bold = _zero_width("\x1b[22m")
+    return f"{_bold(s)}{end_bold}"
 
 
 def _underline(s):
@@ -259,7 +264,7 @@ def get_git_branch():
     first_line = output.split(b"\n", maxsplit=1)[0]
     first_line = first_line.decode("utf-8")
     branch_name = first_line.split(" ")[-1]
-    return f"{GIT_SYMBOL} {branch_name}"
+    return f"{BRANCH_SYMBOL} {branch_name}"
 
 
 def _get_user_name():
@@ -409,7 +414,7 @@ def get_git_info(git_info: str):
 
     # VCS symbol, or uppercase VCS name if not git.
     vcs = info.get("vcs", "")
-    text += GIT_SYMBOL if vcs == "git" else vcs.upper()
+    text += BRANCH_SYMBOL if vcs == "git" else vcs.upper()
 
     # Get branch name and add it.
     branch = info["branch"]
@@ -459,16 +464,24 @@ def get_vcs_info(git_porcelain: str, vcs_info=None, time_of_last_commit=None):
     git_fg = BLACK
     git_bg = YELLOW
 
-    # Add the symbol first
-    parts = [GIT_SYMBOL]
+    # Add the branch symbol first
+    parts = [_quick_bold(BRANCH_SYMBOL)]
 
     # Parse the output from the `git porcelain` command
-    porcelain = _parse_git_porcelain(git_porcelain)
+    try:
+        porcelain = _parse_git_porcelain(git_porcelain)
+    except ValueError:
+        return {
+            "text": "",
+            "foreground": git_fg,
+            "background": git_bg,
+        }
 
     # Get branch name and add it, color the branch specially if main/master.
     branch = porcelain["branch"]
-    parts.append(branch)
+    parts.append(_quick_bold(branch))  # Bold ONLY the branch name
     if branch in ("main", "master"):
+        # Style the git info differently if we're on the main branch.
         git_bg = BLUE
         git_fg = WHITE
 
@@ -477,7 +490,7 @@ def get_vcs_info(git_porcelain: str, vcs_info=None, time_of_last_commit=None):
         action = vcs_info["action"]
         parts = [f"[{action}]"] + parts
         git_fg = BLACK
-        git_bg = MAGENTA
+        git_bg = RED
 
     # Add status counts from porcelain
     if porcelain["ahead"] > 0:
