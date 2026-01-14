@@ -6,6 +6,7 @@ import argparse
 import os
 import re
 import socket
+import subprocess
 from copy import deepcopy
 from datetime import datetime
 
@@ -62,7 +63,9 @@ def _zero_width(s):
     sequences should be marked as zero-width.
 
     """
-    return f"%{{{s}%}}"
+    if _detect_shell() == "zsh":
+        return f"%{{{s}%}}"
+    return s
 
 
 def _foreground(s, color):
@@ -150,6 +153,17 @@ def style(s, foreground=None, background=None, bold=False, underline=False, reve
 
 
 # region Part Methods
+def _detect_shell():
+    """Detect the current shell (bash or zsh) based on environment variables."""
+    shell = subprocess.getoutput("ps -p $$ -o comm=").lower()
+    if "zsh" in shell:
+        return "zsh"
+    elif "bash" in shell:
+        return "bash"
+    else:
+        return "unknown"
+
+
 def _terminal_width():
     """Return the width of the terminal in characters."""
     width = os.popen("stty size", "r").read().split()[1]
