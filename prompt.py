@@ -3,12 +3,11 @@
 
 # System imports
 import argparse
-from datetime import datetime
 import os
 import re
-import subprocess
 import socket
 from copy import deepcopy
+from datetime import datetime
 
 # Third-party imports
 
@@ -22,7 +21,7 @@ SPACER = "·"
 CHEVRON = ""
 USER_PLACEHOLDER = " "
 ELLIPSIS = "…"
-GIT_SYMBOL = ""
+BRANCH_SYMBOL = ""
 DIR_SYMBOL = ""
 VENV_SYMBOL = ""
 GIT_AHEAD = "↑"
@@ -43,15 +42,15 @@ MAGENTA = "magenta"
 CYAN = "cyan"
 WHITE = "white"
 
-# Section colors
-USER_FG = BLACK
-USER_BG = WHITE
+# Section colors (allow override via environment variables)
+USER_FG = os.getenv("PROMPT_USER_FG", BLACK)
+USER_BG = os.getenv("PROMPT_USER_BG", WHITE)
 
-PATH_FG = WHITE
-PATH_BG = BLUE
+PATH_FG = os.getenv("PROMPT_PATH_FG", WHITE)
+PATH_BG = os.getenv("PROMPT_PATH_BG", BLUE)
 
-VENV_FG = BLACK
-VENV_BG = MAGENTA
+VENV_FG = os.getenv("PROMPT_VENV_FG", BLACK)
+VENV_BG = os.getenv("PROMPT_VENV_BG", MAGENTA)
 
 
 # region Styling Utilities
@@ -97,6 +96,11 @@ def _background(s, color):
 def _bold(s):
     bold = _zero_width("\x1b[1m")
     return f"{bold}{s}"
+
+
+def _quick_bold(s):
+    end_bold = _zero_width("\x1b[22m")
+    return f"{_bold(s)}{end_bold}"
 
 
 def _underline(s):
@@ -248,20 +252,6 @@ def get_venv():
     return {"text": text, "foreground": VENV_FG, "background": VENV_BG}
 
 
-def get_git_branch():
-    """Return the current git branch, or blank string if not in a git repo."""
-    try:
-        output = subprocess.check_output("git status".split(), stderr=subprocess.PIPE)
-    except subprocess.CalledProcessError:
-        # Non-zero return code, assume the current working dir is not in a git
-        # repo.
-        return ""
-    first_line = output.split(b"\n", maxsplit=1)[0]
-    first_line = first_line.decode("utf-8")
-    branch_name = first_line.split(" ")[-1]
-    return f"{GIT_SYMBOL} {branch_name}"
-
-
 def _get_user_name():
     """Return the current user's username, or '????' if `USER` env var is not set."""
     return os.getenv("USER") or "????"
@@ -275,7 +265,7 @@ def _get_host_name():
 def get_user_at_host():
     """Return 'user@host' if in an SSH session, else a placeholder symbol."""
     styles = {"text": "", "foreground": USER_FG, "background": USER_BG, "bold": False}
-    if os.environ.get("SSH_CONNECTION"):
+    if os.getenv("SSH_CONNECTION"):
         styles["text"] = f"{_get_user_name()}@{_get_host_name()}"
     else:
         styles["text"] = USER_PLACEHOLDER
@@ -409,7 +399,7 @@ def get_git_info(git_info: str):
 
     # VCS symbol, or uppercase VCS name if not git.
     vcs = info.get("vcs", "")
-    text += GIT_SYMBOL if vcs == "git" else vcs.upper()
+    text += BRANCH_SYMBOL if vcs == "git" else vcs.upper()
 
     # Get branch name and add it.
     branch = info["branch"]
@@ -459,16 +449,24 @@ def get_vcs_info(git_porcelain: str, vcs_info=None, time_of_last_commit=None):
     git_fg = BLACK
     git_bg = YELLOW
 
-    # Add the symbol first
-    parts = [GIT_SYMBOL]
+    # Add the branch symbol first
+    parts = [_quick_bold(BRANCH_SYMBOL)]
 
     # Parse the output from the `git porcelain` command
-    porcelain = _parse_git_porcelain(git_porcelain)
+    try:
+        porcelain = _parse_git_porcelain(git_porcelain)
+    except ValueError:
+        return {
+            "text": "",
+            "foreground": git_fg,
+            "background": git_bg,
+        }
 
     # Get branch name and add it, color the branch specially if main/master.
     branch = porcelain["branch"]
-    parts.append(branch)
+    parts.append(_quick_bold(branch))  # Bold ONLY the branch name
     if branch in ("main", "master"):
+        # Style the git info differently if we're on the main branch.
         git_bg = BLUE
         git_fg = WHITE
 
@@ -477,7 +475,7 @@ def get_vcs_info(git_porcelain: str, vcs_info=None, time_of_last_commit=None):
         action = vcs_info["action"]
         parts = [f"[{action}]"] + parts
         git_fg = BLACK
-        git_bg = MAGENTA
+        git_bg = RED
 
     # Add status counts from porcelain
     if porcelain["ahead"] > 0:
@@ -575,30 +573,23 @@ def parts_assembler(parts, side="left"):
     return assembly
 
 
-# def left_prompt(current_working_dir, last_exit_status=None):
-#     """Return my zsh left prompt."""
-#     # hr = style(horizontal_rule("·"))
-#     parts = (
-#         {"text": get_user_at_host(), "foreground": BLACK, "background": BLUE},
-#         {"text": shorten_path(current_working_directory), "foreground": BLACK, "background": GREEN},
-#         {"text": get_git_branch(), "foreground": BLACK, "background": CYAN},
-#     )
-#     # return f"{hr} {user} {cwd} {chevron} "
-#     assembled_parts = parts_assembler(parts, side="left")
-#     # return f"{hr}{assembled_parts} {get_chevron(last_exit_status)} "
-#     newline = _zero_width("\n")
-#     return f"{newline}{assembled_parts} {get_chevron(last_exit_status)} "
-#     # return f"{assembled_parts}{newline} {get_chevron(last_exit_status)} "
+def left_prompt(parts: dict[str, dict | str]):
+    """Return my zsh left prompt."""
+    left_parts = [
+        parts["user"],
+        parts["path"],
+        parts["vcs"],
+    ]
+    assembled_parts = parts_assembler(left_parts, side="left")
+    newline = _zero_width("\n")
+    return f"{newline}{assembled_parts} {get_chevron(bool(parts['exit']['text']))} "
 
 
-# def right_prompt(last_exit_status):
-#     """Return my zsh right prompt."""
-#     parts = (
-#         {"text": last_exit_status, "foreground": BLACK, "background": RED, "bold": True},
-#         {"text": get_venv(), "foreground": BLACK, "background": MAGENTA},
-#     )
-#     assembled_parts = parts_assembler(parts, side="right")
-#     return assembled_parts
+def right_prompt(parts: dict[str, dict | str]):
+    """Return my zsh right prompt."""
+    right_parts = [parts["exit"], parts["venv"]]
+    assembled_parts = parts_assembler(right_parts, side="right")
+    return assembled_parts
 
 
 def bash_prompt(parts: dict):
@@ -626,7 +617,7 @@ def bash_prompt(parts: dict):
         content_length = printable_length(left_side) + printable_length(right_side)
         space = _terminal_width() - content_length - 1
 
-    return f"{left_side}{_spacer(space)}{right_side}{_newline()}{get_chevron(parts['exit']['text'])} "
+    return f"{left_side}{_spacer(space)}{right_side}{_newline()}{get_chevron(bool(parts['exit']['text']))} "
 
 
 def _get_parts(args):
@@ -693,10 +684,10 @@ def main():
     parts = _get_parts(args)
 
     match args.side:
-        # case "left":
-        #     output = left_prompt(cwd, last_exit_status)
-        # case "right":
-        #     output = right_prompt(last_exit_status)
+        case "left":
+            output = left_prompt(parts)
+        case "right":
+            output = right_prompt(parts)
         case "bash":
             output = bash_prompt(parts)
         case _:
