@@ -35,14 +35,14 @@ To create a symbolic link in the home directory that points to this repo, you ca
 **Commands intended to be run from this repos root dir**
 
 ```bash
-ln -s $(pwd)/aliases ~/.aliases
-ln -s $(pwd)/shell_functions.sh ~/.shell_functions.sh
-ln -s $(pwd)/zshconfig ~/.zshrc
-ln -s $(pwd)/p10k_config ~/.p10k.zsh
+ln -s $(pwd)/dot_files/aliases ~/.aliases
+ln -s $(pwd)/scripts/shell_functions.sh ~/.shell_functions.sh
+ln -s $(pwd)/dot_files/zshconfig ~/.zshrc
+ln -s $(pwd)/dot_files/p10k_config ~/.p10k.zsh
 mkdir ~/.config/nvim
-ln -s $(pwd)/init.lua ~/.config/nvim/init.lua
+ln -s $(pwd)/dot_files/init.lua ~/.config/nvim/init.lua
 mkdir ~/.config/i3
-ln -s $(pwd)/i3_config ~/.config/i3/config
+ln -s $(pwd)/dot_files/i3_config ~/.config/i3/config
 ```
 
 ## Packages/Apps ##
