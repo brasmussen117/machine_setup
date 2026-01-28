@@ -49,7 +49,7 @@ ln -s $(pwd)/dot_files/i3_config ~/.config/i3/config
 
 ### Chrome ###
 
-https://www.google.com/chrome/
+[Download Chrome](https://www.google.com/chrome/)
 
 ### zsh ###
 
@@ -62,6 +62,8 @@ chsh -s $(which zsh)
 * Log out and log back in to check if the default shell was changed
 
 ### Oh My Zsh ###
+
+#### Install omz and addons/dependencies ####
 
 * [Install instructions from their GitHub](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
 
@@ -81,30 +83,35 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
   ```
 
   * Set the font on the terminal profile
+
+#### Powerlevel10k Theme ####
+
 * [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#oh-my-zsh)
 
-```bash
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-```
+  * ```bash
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    ```
 
-* Plugins
-  * [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh)
+#### Plugins ####
 
-    * ```bash
-      git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-      ```
+* These commands include code to clone the repos into `ZSH_CUSTOM` directory
+* [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh)
 
-  * [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh)
+  * ```bash
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    ```
 
-    * ```bash
-      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-      ```
+* [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh)
 
-  * [you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use?tab=readme-ov-file#installation)
+  * ```bash
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    ```
 
-    * ```bash
-      git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
-      ```
+* [you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use?tab=readme-ov-file#installation)
+
+  * ```bash
+    git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
+    ```
 
 ### AppImageLauncher ###
 
