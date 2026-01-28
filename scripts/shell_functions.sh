@@ -45,6 +45,63 @@ gfu () {
     ! git log -n "$1" --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git commit --fixup
 }
 
+# Function to cherry-pick commits from a source branch onto the current branch using fzf for selection
+# $1: source branch
+# $2: number of commits to fetch (default: 10)
+gcherrypick() {
+  if [ -z "$1" ]; then
+    echo "Usage: gcherrypick <source-branch> [<num-commits> (default: 10)]"
+    echo "Example: gcherrypick feature-branch 25"
+    return 1
+  fi
+
+  local source_branch="$1"
+  local num_commits="${2:-10}"
+  local current_branch
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+  # Verify fzf is installed
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo -e "${RED}Error:${RESET} fzf not found. Install with 'sudo apt install fzf' or 'brew install fzf'."
+    return 1
+  fi
+
+  git fetch --all --quiet
+
+  echo -e "${BLUE}Fetching last ${YELLOW}${num_commits}${BLUE} commits from ${CYAN}${source_branch}${RESET}..."
+  local selected
+  selected=$(git log "$source_branch" --oneline -n "$num_commits" \
+    | fzf -m --ansi --header="Select commits to cherry-pick onto $current_branch (Tab to multi-select, Enter to confirm)")
+
+  if [ -z "$selected" ]; then
+    echo -e "${YELLOW}No commits selected.${RESET}"
+    return 1
+  fi
+
+  # Extract hashes and preserve chronological order
+  local commits
+  commits=$(echo "$selected" | awk '{print $1}' | tac)
+
+  echo
+  echo -e "${BLUE}Cherry-picking onto ${CYAN}${current_branch}${BLUE} from ${CYAN}${source_branch}${RESET}:"
+  echo "${commits/#^/  }"
+  echo
+
+  for c in $commits; do
+    echo -e "${CYAN}Cherry-picking${RESET} $c"
+    if ! git cherry-pick "$c"; then
+      echo
+      echo -e "${RED}Conflict during cherry-pick of${RESET} $c"
+      echo -e "${YELLOW}Resolve conflicts, then run:${RESET}  git cherry-pick --continue"
+      echo -e "${YELLOW}Or abort with:${RESET}               git cherry-pick --abort"
+      return 1
+    fi
+  done
+
+  echo
+  echo -e "${GREEN}Cherry-pick completed successfully.${RESET}"
+}
+
 # shortcut to install a deb file downloaded to the Downloads directory
 # $1: name of the deb file to install
 install_deb_from_downloads() {
