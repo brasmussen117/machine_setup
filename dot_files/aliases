@@ -57,6 +57,7 @@ alias pinstall="pipenv install"
 alias plock="pipenv lock"
 alias psync="pipenv sync"
 alias psynd="pipenv sync --dev"
+alias pmg="pipenv run python manage.py"
 alias pmgr="pipenv run python manage.py runserver"
 
 # Django management
