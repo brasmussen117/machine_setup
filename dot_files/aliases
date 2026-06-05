@@ -26,8 +26,9 @@ alias gbtree="git log --graph --simplify-by-decoration --pretty=format:'%d' --al
 alias gbt="git log --graph --simplify-by-decoration --pretty=format:'%d' --all" # show a graph of all branches (and tags)
 alias gtdl="git tag -l | xargs git tag -d; git pull" # DANGEROUS: delete all local tags and pull; useful if someone else changes tags
 alias glf="git log development.. --oneline --decorate" # show commits on current branch on top of development
-alias glr="git pull --rebase"
+alias glr="git pull --rebase" # pull and rebase combo
 alias gswb="git switch -" # switch to last branch
+alias gpt="git push origin --tags" # push local tags to origin
 
 # # composer
 # alias cdump="composer dump-autoload"
@@ -82,7 +83,7 @@ alias dbas="cd /home/brenden/repos/dbaseweb/"
 alias o2g="cd /home/brenden/repos/hybelso2g/"
 alias o3g="cd /home/brenden/repos/django3g/"
 alias bak="cd /home/brenden/backups/"
-alias bakd="cd /home/brenden/backups/dbase/"
+alias bakd="cd /home/brenden/backups/dbaseweb/"
 alias bako="cd /home/brenden/backups/o3g/"
 alias tmp="cd /home/brenden/tmp/"
 alias aliases="$EDITOR /home/brenden/.aliases"
