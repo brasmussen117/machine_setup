@@ -39,6 +39,10 @@ agl () {
     alias | grep $1 $2 --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} | less
 }
 
+
+# shortcut to see the git diff between HEAD and remote for the current branch (like if local has rebased)
+ghrdiff() { git diff HEAD...origin/$(git rev-parse --abbrev-ref HEAD); }
+
 # shortcut to do a git fixup with fzf (fuzzy finder) as a TUI
 # $1: number of commits to look back
 gfu () {
