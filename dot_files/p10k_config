@@ -65,6 +65,7 @@
     toolbox                 # toolbox name (https://github.com/containers/toolbox)
     context                 # user@hostname
     midnight_commander      # midnight commander shell (https://midnight-commander.org/)
+    vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     # load                  # CPU load
     # disk_usage            # disk usage
     # ram                   # free RAM

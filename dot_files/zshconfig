@@ -75,6 +75,7 @@ plugins=(
 	ssh-agent
 	sudo
 	tmux
+	vi-mode
 	virtualenv
 	you-should-use
 	zsh-autosuggestions
